@@ -1,0 +1,47 @@
+﻿name: incident-commander
+version: "1.0.0"
+description: >
+  A high-fidelity SRE Incident Response simulator where an AI agent
+  must diagnose and resolve production outages across three escalating
+  difficulty levels. Tasks simulate real Meta-scale infrastructure failures.
+author: "Incident Commander Team"
+tags:
+  - openenv
+  - sre
+  - infrastructure
+  - pytorch-hackathon
+  - meta
+interface:
+  observation: >
+    JSON object containing: logs (list of strings), cpu_usage (float 0-100),
+    memory_usage (float 0-100), disk_usage (float 0-100),
+    services_status (dict of service_name -> up/down/degraded),
+    active_alerts (list of strings), step_count (int)
+  action: >
+    JSON object with field: command (string).
+    Valid prefixes: RESTART <service>, CLEAN <path>, KILL <pid>,
+    CHECK <resource>, ROLLBACK <service>, SCALE <service> <n>, POSTMORTEM
+  reward: >
+    Float between -1.0 and 1.0. Incremental rewards for correct
+    diagnostic steps. Penalties for wrong actions and time waste.
+    Bonus for postmortem submission on hard task.
+tasks:
+  - id: task_1
+    name: "Service Down"
+    difficulty: easy
+    description: "nginx is down. Identify and restart the correct service."
+  - id: task_2
+    name: "Disk Full Crisis"
+    difficulty: medium
+    description: "Disk at 98%. Find which path is full and clean it. Wrong cleans are penalized."
+  - id: task_3
+    name: "Cascading Memory Leak"
+    difficulty: hard
+    description: >
+      Three services running. One has a memory leak causing cascading CPU
+      spike and partial network degradation. Agent must CHECK, identify the
+      leaking process, KILL only that one, verify recovery, then submit POSTMORTEM.
+baseline_score:
+  task_1: 0.0
+  task_2: 0.0
+  task_3: 0.0
