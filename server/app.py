@@ -1,3 +1,4 @@
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from env import IncidentCommanderEnv
 from models import Action, StepResult, TaskResult
@@ -13,13 +14,13 @@ def root():
 
 @app.get("/info")
 def info():
-    # Evolved: Handles pathing correctly for PowerShell/Docker environments
     base_path = os.path.dirname(__file__)
     with open(os.path.join(base_path, "openenv.yaml"), "r") as f:
         return yaml.safe_load(f)
 
+@app.post("/reset")
 @app.post("/reset/{task_id}")
-def reset(task_id: str):
+def reset(task_id: str = "task_1"):
     try:
         envs[task_id] = IncidentCommanderEnv(task_id=task_id)
         return envs[task_id].reset()
@@ -44,3 +45,10 @@ def grade(task_id: str):
         success=envs[task_id].grade() >= 0.5,
         reason="Automated SRE Grading"
     )
+
+# THE VALIDATOR REQUIRES THIS SPECIFIC MAIN FUNCTION
+def main():
+    uvicorn.run("server.app:app", host="0.0.0.0", port=7860, reload=False)
+
+if __name__ == "__main__":
+    main()
