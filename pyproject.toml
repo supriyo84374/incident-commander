@@ -33,5 +33,6 @@ dependencies = [
     "openenv-core>=0.1.0"
 ]
 
+
 [project.scripts]
-server = "main:app"
+server = "server.app:main"
