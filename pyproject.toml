@@ -12,7 +12,7 @@ dependencies = [
     "fastapi",
     "uvicorn",
     "pyyaml",
-    "openenv-core>=0.2.0"
+    "openenv-core>=0.1.0"
 ]
 
 [project.scripts]
@@ -30,7 +30,7 @@ dependencies = [
     "fastapi",
     "uvicorn",
     "pyyaml",
-    "openenv-core>=0.2.0"
+    "openenv-core>=0.1.0"
 ]
 
 [project.scripts]
